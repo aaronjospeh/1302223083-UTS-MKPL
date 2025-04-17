@@ -28,8 +28,8 @@ public class Employee {
 	private String spouseName;
 	private String spouseIdNumber;
 
-	private List<String> childNames;
-	private List<String> childIdNumbers;
+	// refactoring 5 Data Clumps
+	private List<Child> children;
 
 	// refactoring 1 Long Parameter List
 	public Employee(PersonalInfo info, LocalDate dateJoined) {
@@ -43,8 +43,8 @@ public class Employee {
 
 		this.joinedDate = dateJoined;
 
-		childNames = new LinkedList<>();
-		childIdNumbers = new LinkedList<>();
+		// refactoring 5 Data Clumps
+		children = new LinkedList<>();
 	}
 
 	/**
@@ -75,12 +75,12 @@ public class Employee {
 	// refactoring 4 Inconsistent Naming
 	public void setSpouse(String spouseName, String spouseIdNumber) {
 		this.spouseName = spouseName;
-		this.spouseIdNumber = spouseIdNumber; // ✅ sekarang benar
+		this.spouseIdNumber = spouseIdNumber;
 	}
 
+	// refactoring 5 Data Clumps
 	public void addChild(String childName, String childIdNumber) {
-		childNames.add(childName);
-		childIdNumbers.add(childIdNumber);
+		children.add(new Child(childName, childIdNumber));
 	}
 
 	public int getAnnualIncomeTax() {
@@ -96,6 +96,6 @@ public class Employee {
 		}
 
 		return TaxFunction.calculateTax(monthlySalary, otherMonthlyIncome, monthWorkingInYear, annualDeductible,
-				spouseIdNumber.equals(""), childIdNumbers.size());
+				spouseIdNumber.equals(""), children.size());
 	}
 }
