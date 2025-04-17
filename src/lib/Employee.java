@@ -25,8 +25,8 @@ public class Employee {
 	private int otherMonthlyIncome;
 	private int annualDeductible;
 
-	private String spouseName;
-	private String spouseIdNumber;
+	// refactoring 6 Large Class
+	private Spouse spouse;
 
 	// refactoring 5 Data Clumps
 	private List<Child> children;
@@ -73,14 +73,18 @@ public class Employee {
 	}
 
 	// refactoring 4 Inconsistent Naming
-	public void setSpouse(String spouseName, String spouseIdNumber) {
-		this.spouseName = spouseName;
-		this.spouseIdNumber = spouseIdNumber;
+	// refactoring 6 Large Class
+	public void setSpouse(String name, String idNumber) {
+		this.spouse = new Spouse(name, idNumber);
 	}
 
 	// refactoring 5 Data Clumps
 	public void addChild(String childName, String childIdNumber) {
 		children.add(new Child(childName, childIdNumber));
+	}
+
+	private boolean isSingle() {
+		return spouse == null || spouse.getIdNumber().isEmpty();
 	}
 
 	public int getAnnualIncomeTax() {
@@ -95,7 +99,14 @@ public class Employee {
 			monthWorkingInYear = 12;
 		}
 
-		return TaxFunction.calculateTax(monthlySalary, otherMonthlyIncome, monthWorkingInYear, annualDeductible,
-				spouseIdNumber.equals(""), children.size());
+		return TaxFunction.calculateTax(
+			monthlySalary, 
+			otherMonthlyIncome, 
+			monthWorkingInYear, 
+			annualDeductible, 
+			// refactoring 6 Large Class
+			isSingle(),
+			children.size()
+		);
 	}
 }
