@@ -72,9 +72,10 @@ public class Employee {
 		this.otherMonthlyIncome = income;
 	}
 
+	// refactoring 4 Inconsistent Naming
 	public void setSpouse(String spouseName, String spouseIdNumber) {
 		this.spouseName = spouseName;
-		this.spouseIdNumber = spouseIdNumber;
+		this.spouseIdNumber = spouseIdNumber; // ✅ sekarang benar
 	}
 
 	public void addChild(String childName, String childIdNumber) {
@@ -87,6 +88,7 @@ public class Employee {
 		//Menghitung berapa lama pegawai bekerja dalam setahun ini, jika pegawai sudah bekerja dari tahun sebelumnya maka otomatis dianggap 12 bulan.
 		LocalDate date = LocalDate.now();
 
+		// refactoring 2 Primitive Obsession
 		if (date.getYear() == joinedDate.getYear()) {
 			monthWorkingInYear = date.getMonthValue() - joinedDate.getMonthValue();
 		} else {
