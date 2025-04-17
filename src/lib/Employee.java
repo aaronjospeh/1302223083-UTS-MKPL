@@ -1,7 +1,7 @@
 package lib;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
+import java.time.Month;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,9 +13,9 @@ public class Employee {
 	private String idNumber;
 	private String address;
 
-	private int yearJoined;
-	private int monthJoined;
-	private int dayJoined;
+	// refactoring 2 Primitive Obsession
+	private LocalDate joinedDate;
+
 	private int monthWorkingInYear;
 
 	private boolean isForeigner;
@@ -31,6 +31,7 @@ public class Employee {
 	private List<String> childNames;
 	private List<String> childIdNumbers;
 
+	// refactoring 1 Long Parameter List
 	public Employee(PersonalInfo info, LocalDate dateJoined) {
 		this.employeeId = info.employeeId;
 		this.firstName = info.firstName;
@@ -40,19 +41,15 @@ public class Employee {
 		this.isForeigner = info.isForeigner;
 		this.gender = info.gender;
 
-		this.yearJoined = dateJoined.getYear();
-		this.monthJoined = dateJoined.getMonthValue();
-		this.dayJoined = dateJoined.getDayOfMonth();
+		this.joinedDate = dateJoined;
 
 		childNames = new LinkedList<>();
 		childIdNumbers = new LinkedList<>();
 	}
 
 	/**
-	 * Fungsi untuk menentukan gaji bulanan pegawai berdasarkan grade kepegawaiannya
-	 * (grade 1: 3.000.000 per bulan, grade 2: 5.000.000 per bulan, grade 3:
-	 * 7.000.000 per bulan) Jika pegawai adalah warga negara asing gaji bulanan
-	 * diperbesar sebanyak 50%
+	 * Fungsi untuk menentukan gaji bulanan pegawai berdasarkan grade kepegawaiannya (grade 1: 3.000.000 per bulan, grade 2: 5.000.000 per bulan, grade 3: 7.000.000 per bulan)
+	 * Jika pegawai adalah warga negara asing gaji bulanan diperbesar sebanyak 50%
 	 */
 	
 	public void setMonthlySalary(int grade) {
@@ -97,8 +94,8 @@ public class Employee {
 		//Menghitung berapa lama pegawai bekerja dalam setahun ini, jika pegawai sudah bekerja dari tahun sebelumnya maka otomatis dianggap 12 bulan.
 		LocalDate date = LocalDate.now();
 
-		if (date.getYear() == yearJoined) {
-			monthWorkingInYear = date.getMonthValue() - monthJoined;
+		if (date.getYear() == joinedDate.getYear()) {
+			monthWorkingInYear = date.getMonthValue() - joinedDate.getMonthValue();
 		} else {
 			monthWorkingInYear = 12;
 		}
