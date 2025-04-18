@@ -37,15 +37,27 @@ public class TaxFunction {
 		return (monthlySalary + otherMonthlyIncome) * numberOfMonthWorking;
 	}
 
+	// refactoring 4 Single Responsibility Principle
+	public static void validateTaxPayerData(TaxPayerData data) {
+			if (data.numberOfMonthWorking > 12) {
+				throw new IllegalArgumentException("Jumlah bulan bekerja tidak boleh lebih dari 12.");
+			}
+			if (data.numberOfMonthWorking < 0) {
+				throw new IllegalArgumentException("Jumlah bulan bekerja tidak boleh negatif.");
+			}
+			if (data.numberOfChildren < 0) {
+				throw new IllegalArgumentException("Jumlah anak tidak boleh negatif.");
+			}
+		}
+
+
 	// refactoring 1 Magic Numbers
 	// refactoring 2 Primitive Obsession
 	// refactoring 3 Long Method
 	public static int calculateTax(TaxPayerData data) {
-
-		if (data.numberOfMonthWorking > 12) {
-			System.err.println("More than 12 month working per year");
-		}
-
+		// refactoring 4 Single Responsibility Principle
+		validateTaxPayerData(data);
+		
 		int validChildCount = getValidatedNumberOfChildren(data.numberOfChildren);
 		int nonTaxableIncome = calculateNonTaxableIncome(data.isMarried, validChildCount);
 		int annualIncome = calculateAnnualIncome(data.monthlySalary, data.otherMonthlyIncome, data.numberOfMonthWorking);
