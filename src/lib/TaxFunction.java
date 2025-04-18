@@ -33,16 +33,17 @@ public class TaxFunction {
 		return nonTaxableIncome;
 	}
 
-	private static int calculateAnnualIncome(int monthlySalary, int otherMonthlyIncome, int numberOfMonthWorking) {
-		return (monthlySalary + otherMonthlyIncome) * numberOfMonthWorking;
+	// refactoring 5 Poor Naming
+	private static int calculateAnnualIncome(int monthlySalary, int otherMonthlyIncome, int monthsWorkedInYear) {
+		return (monthlySalary + otherMonthlyIncome) * monthsWorkedInYear;
 	}
 
 	// refactoring 4 Single Responsibility Principle
 	public static void validateTaxPayerData(TaxPayerData data) {
-			if (data.numberOfMonthWorking > 12) {
+			if (data.monthsWorkedInYear > 12) {
 				throw new IllegalArgumentException("Jumlah bulan bekerja tidak boleh lebih dari 12.");
 			}
-			if (data.numberOfMonthWorking < 0) {
+			if (data.monthsWorkedInYear < 0) {
 				throw new IllegalArgumentException("Jumlah bulan bekerja tidak boleh negatif.");
 			}
 			if (data.numberOfChildren < 0) {
@@ -61,7 +62,7 @@ public class TaxFunction {
 		int validChildCount = getValidatedNumberOfChildren(data.numberOfChildren);
 		int nonTaxableIncome = calculateNonTaxableIncome(data.isMarried, validChildCount);
 		int annualIncome = calculateAnnualIncome(data.monthlySalary, data.otherMonthlyIncome, data.numberOfMonthWorking);
-		int taxableIncome = annualIncome - data.annualDeductible - nonTaxableIncome;
+		int taxableIncome = annualIncome - data.deductibleAmount - nonTaxableIncome;
 
 		int tax = (int) Math.round(TAX_RATE * taxableIncome);
 		return Math.max(tax, 0);
