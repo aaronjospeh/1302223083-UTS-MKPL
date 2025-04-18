@@ -20,28 +20,25 @@ public class TaxFunction {
 	 */
 	
 	// refactoring 1 Magic Numbers
-	public static int calculateTax(int monthlySalary, int otherMonthlyIncome, int numberOfMonthWorking, int deductible, boolean isMarried, int numberOfChildren) {
+	// refactoring 2 Primitive Obsession
+	public static int calculateTax(TaxPayerData data) {
 
-		if (numberOfMonthWorking > 12) {
-			System.err.println("Jumlah bulan bekerja tidak boleh lebih dari 12.");
+		if (data.numberOfMonthWorking > 12) {
+			System.err.println("More than 12 month working per year.");
 		}
 
-		if (numberOfChildren > 3) {
-			numberOfChildren = 3;
-		}
+		int numberOfChildren = Math.min(data.numberOfChildren, 3);
 
 		int nonTaxableIncome = BASIC_NON_TAXABLE_INCOME;
-		if (isMarried) {
+		if (data.isMarried) {
 			nonTaxableIncome += MARRIAGE_ALLOWANCE;
 		}
 		nonTaxableIncome += numberOfChildren * CHILD_ALLOWANCE;
 
-		int annualIncome = (monthlySalary + otherMonthlyIncome) * numberOfMonthWorking;
-		int taxableIncome = annualIncome - deductible - nonTaxableIncome;
+		int annualIncome = (data.monthlySalary + data.otherMonthlyIncome) * data.numberOfMonthWorking;
+		int taxableIncome = annualIncome - data.annualDeductible - nonTaxableIncome;
 
 		int tax = (int) Math.round(TAX_RATE * taxableIncome);
 		return Math.max(tax, 0);
 	}
-
-	
 }
