@@ -19,26 +19,40 @@ public class TaxFunction {
 	 * 
 	 */
 	
-	// refactoring 1 Magic Numbers
-	// refactoring 2 Primitive Obsession
-	public static int calculateTax(TaxPayerData data) {
+	// refactoring 3 Long Method
+	private static int getValidatedNumberOfChildren(int numberOfChildren) {
+		return Math.min(numberOfChildren, 3);
+	}
 
-		if (data.numberOfMonthWorking > 12) {
-			System.err.println("More than 12 month working per year.");
-		}
-
-		int numberOfChildren = Math.min(data.numberOfChildren, 3);
-
+	private static int calculateNonTaxableIncome(boolean isMarried, int numberOfChildren) {
 		int nonTaxableIncome = BASIC_NON_TAXABLE_INCOME;
-		if (data.isMarried) {
+		if (isMarried) {
 			nonTaxableIncome += MARRIAGE_ALLOWANCE;
 		}
 		nonTaxableIncome += numberOfChildren * CHILD_ALLOWANCE;
+		return nonTaxableIncome;
+	}
 
-		int annualIncome = (data.monthlySalary + data.otherMonthlyIncome) * data.numberOfMonthWorking;
+	private static int calculateAnnualIncome(int monthlySalary, int otherMonthlyIncome, int numberOfMonthWorking) {
+		return (monthlySalary + otherMonthlyIncome) * numberOfMonthWorking;
+	}
+
+	// refactoring 1 Magic Numbers
+	// refactoring 2 Primitive Obsession
+	// refactoring 3 Long Method
+	public static int calculateTax(TaxPayerData data) {
+
+		if (data.numberOfMonthWorking > 12) {
+			System.err.println("More than 12 month working per year");
+		}
+
+		int validChildCount = getValidatedNumberOfChildren(data.numberOfChildren);
+		int nonTaxableIncome = calculateNonTaxableIncome(data.isMarried, validChildCount);
+		int annualIncome = calculateAnnualIncome(data.monthlySalary, data.otherMonthlyIncome, data.numberOfMonthWorking);
 		int taxableIncome = annualIncome - data.annualDeductible - nonTaxableIncome;
 
 		int tax = (int) Math.round(TAX_RATE * taxableIncome);
 		return Math.max(tax, 0);
 	}
+
 }
